@@ -39,6 +39,15 @@ public class XMLParserTest {
         String text = element.text();
         assertEquals("tom", text);
     }
+
+    @Test
+    public void parsesNullExistDocumentElement() {
+        Document doc = Jsoup.parse(xml);
+        Elements id = doc.getElementsByTag( "id" );
+        assertEquals(0, id.size());
+    }
+
+
     @Test
     public void parsesSimpleDocumentElementAttr() {
         Document doc = Jsoup.parse(xml);
