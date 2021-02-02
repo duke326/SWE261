@@ -6,7 +6,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 
+import static org.jsoup.parser.CharacterReader.maxBufferLen;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class XMLParserTest {
 
@@ -57,6 +59,25 @@ public class XMLParserTest {
         String studentNumber=element.attr("number");
         //System.out.println(studentNumber);
         assertEquals("0001", studentNumber);
+    }
+
+    @Test
+    public void handleSuperLargeTagNames() {
+        // unlikely, but valid. so who knows.
+
+        StringBuilder sb = new StringBuilder(maxBufferLen);
+        do {
+            sb.append("LargeTagName");
+        } while (sb.length() < maxBufferLen);
+        String tag = sb.toString();
+        String xml = "<" + tag + ">One</" + tag + ">";
+        Document doc = Parser.xmlParser().settings(ParseSettings.preserveCase).parseInput(xml, "");
+        Elements els = doc.select(tag);
+        assertEquals(1, els.size());
+        Element el = els.first();
+        assertNotNull(el);
+        assertEquals("One", el.text());
+        assertEquals(tag, el.tagName());
     }
 
 }
