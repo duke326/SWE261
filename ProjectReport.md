@@ -302,19 +302,84 @@ Partition testing: separates the input space into classes whose union is the ent
 
 ## Then, select a feature that allows for partitioning.
 
-```java
-
-```
-
-
-
 ## Specify your partitions (and boundaries when appropriate) in English — describe them.
 
-
+In this project, our select XML parse as our partition feature. In test case, we try to figure out whether Jsoup can process the correct xml string as well as incorrect xml string. Also, we try boundaries case like xml with large tag name case. 
 
 ## Then, write **new test cases** in JUnit, and describe and document those test cases and how they run.
 
+test whether Jsoup could get elements from the tag we assign:
 
+```java
+    @Test
+    public void parsesDocumentSize() {
+        Document doc = Jsoup.parse(xml);
+        Elements name = doc.getElementsByTag( "name" );
+        assertEquals(2, name.size());
+    }
+```
+
+test whether Jsoup could get element from the elements array:
+
+```java
+	@Test
+    public void parsesSimpleDocumentElement() {
+        Document doc = Jsoup.parse(xml);
+        Elements name = doc.getElementsByTag( "name" );
+        Element element = name.get( 0 );
+        String text = element.text();
+        assertEquals("tom", text);
+    }
+```
+
+test whether Jsoup could return correct answer when we input a wrong tag:
+
+```java
+    @Test
+    public void parsesNullExistDocumentElement() {
+        Document doc = Jsoup.parse(xml);
+        Elements id = doc.getElementsByTag( "id" );
+        assertEquals(0, id.size());
+    }
+```
+
+test whether Jsoup could get xml's attribution: 
+
+```java
+@Test
+public void parsesSimpleDocumentElementAttr() {
+    Document doc = Jsoup.parse(xml);
+    Elements name=doc.getElementsByTag("student");
+    Element element = name.get( 0 );
+    //System.out.println(element.text());
+    String studentNumber=element.attr("number");
+    //System.out.println(studentNumber);
+    assertEquals("0001", studentNumber);
+}
+```
+
+test whether a very large tag name can be parse by Jsoup:
+
+```java
+@Test 
+public void handleSuperLargeTagNames() {
+    // unlikely, but valid. so who knows.
+
+    StringBuilder sb = new StringBuilder(maxBufferLen);
+    do {
+        sb.append("LargeTagName");
+    } while (sb.length() < maxBufferLen);
+    String tag = sb.toString();
+    String xml = "<" + tag + ">One</" + tag + ">";
+    Document doc = Parser.xmlParser().settings(ParseSettings.preserveCase).parseInput(xml, "");
+    Elements els = doc.select(tag);
+    assertEquals(1, els.size());
+    Element el = els.first();
+    assertNotNull(el);
+    assertEquals("One", el.text());
+    assertEquals(tag, el.tagName());
+}
+```
 
 # Team Members
 
