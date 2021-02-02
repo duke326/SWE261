@@ -2,7 +2,7 @@
 
 ## What is the tool that you are testing?
 
-We are testing the tool called jsoup. Its Github link is https://github.com/samaritanhu/jsoup.
+We are testing the tool called jsoup. Our Github link is https://github.com/duke326/SWE261.
 
 ## What is its purpose?
 
