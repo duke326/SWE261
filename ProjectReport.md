@@ -38,13 +38,15 @@ In ubuntu system, I used this command to calculate the number of java files.
 find . -name '*.java' | wc -l
 ```
 
+Language: 100% of Java
+
 # **Set Up**
 
 ## Fork & Add
 
 Fork your project into GitHub. Add all your team members to the forked project, add Prof. Jones and TA Maruf as collaborators.
 
-Our link is here: https://github.com/samaritanhu/jsoup
+Our link is here: https://github.com/duke326/SWE261.
 
 ## Build
 
@@ -68,7 +70,7 @@ Then your idea will automatically download the dependency.
 
 When the progress bar is full, you can run any test case in the test folder.
 
-### Setup for using JUnit 5
+#### Setup for using JUnit 5
 
 Usage of JUnit 5 with Maven
 
@@ -163,7 +165,7 @@ To make it easier for your to apply this, a full pom is displayed, in your proje
 </project>
 ```
 
-### Sample to run
+#### Sample to run
 
 For example, in `test/java/ org.json/helper/DataUtilTest.java`
 
@@ -190,6 +192,12 @@ A JUnit *test* is a method contained in a class which is only used for testing. 
 This method executes the code under test. You use an *assert* method, provided by JUnit or another assert framework, to check an expected result versus the actual result. These calls are typically called *asserts* or *assert statements*.
 
 Assert statements typically allow to define messages which are shown if the test fails. You should provide here meaningful messages to make it easier for the user to identify and fix the problem. This is especially true if someone looks at the problem, who did not write the code under test or the test code.
+
+#### Existing test cases
+
+<img src="https://i.loli.net/2021/02/02/jk71tEhACT9BncD.png" alt="image.png" style="zoom:33%;" />
+
+<img src="https://i.loli.net/2021/02/02/nR4wJCvQouyD29t.png" alt="image.png" style="zoom:33%;" />
 
 #### Sample test case
 
