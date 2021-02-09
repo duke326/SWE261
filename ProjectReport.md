@@ -2,7 +2,7 @@
 
 ## What is the tool that you are testing?
 
-We are testing the tool called jsoup. Its Github link is https://github.com/samaritanhu/jsoup.
+We are testing the tool called jsoup. Our Github link is https://github.com/duke326/SWE261.
 
 ## What is its purpose?
 
@@ -209,7 +209,7 @@ In `org/jsoup/parser/parsesSimpleDocument.java`
     }
 ```
 
-This method mainly test the parse HTML(String) to the **Document** object. **Document** object contains attributes that can be used to analysis the **Elements** in the HTML(String). This **parsesSimpleDocument** test method mainly test whether the result from parse method is actually match the real data. In other word, to test the validation of function parse. 
+This method mainly test the parser. This function parse HTML(String) to the **Document** object. **Document** object contains attributes that can be used to analysis the **Elements** in the HTML(String). This `parsesSimpleDocument.java` test method mainly test whether the result from parse method is actually match the real data using `assertEquals`. In other word, to test the validation of function parse. 
 
 In `org/jsoup/nodes/testTitles.java`
 
@@ -234,7 +234,7 @@ In `org/jsoup/nodes/testTitles.java`
     }
 ```
 
-This method mainly test the validation of **Document** object and it's attribute. There several assertion test in this test unit. To test the **title** attributes and validate the accuracy of the method parse. 
+This method mainly test the validation of **Document** object and its attribute. There are several assertion test in this test unit, including `noTitle` and `withTitle`. They tested the **title** attributes and validate the accuracy of the method parse. 
 
 In `org/jsoup/parser/TagTest.java`
 
@@ -263,7 +263,7 @@ In `org/jsoup/parser/TagTest.java`
     }
 ```
 
-This Test class contains many unit test to validate the **Tag** and test the functionality of tag attribute in the **Document** object. The above code mainly test the case sensitive, equal and the Insensitive of different **Tag**. 
+This Test class contains many unit test to validate the **Tag** and test the functionality of tag attributes in the **Document** object. The above code mainly test the case sensitive, equal and the Insensitive of different **Tag**. 
 
 
 
@@ -302,13 +302,19 @@ Partition testing: separates the input space into classes whose union is the ent
 
 ## Then, select a feature that allows for partitioning.
 
+In jsoup project, we have XML parser and HTML parser, but in test cases, jsoup only has HTML parser test. Therefore, we decided to choose XML parser and test the functions in XML parser. 
+
 ## Specify your partitions (and boundaries when appropriate) in English — describe them.
 
-In this project, our select XML parse as our partition feature. In test case, we try to figure out whether Jsoup can process the correct xml string as well as incorrect xml string. Also, we try boundaries case like xml with large tag name case. 
+In this project, we select XML parse as our partition feature. 
+
+In test case, we try to figure out whether Jsoup can process the correct xml string as well as incorrect xml string using `assertEquals` function.
+
+For boundaries, we talked about Leap Year in class, and its boundaries are range of years and certain set of years, like 2000. For our case, we don't have ranges of xml. Then we figure out that we can use the length of each xml file as ranges. Also, we try boundaries case like xml with large tag name case. 
 
 ## Then, write **new test cases** in JUnit, and describe and document those test cases and how they run.
 
-test whether Jsoup could get elements from the tag we assign:
+Test whether Jsoup could get elements from the tag we assign:
 
 ```java
     @Test
@@ -319,7 +325,7 @@ test whether Jsoup could get elements from the tag we assign:
     }
 ```
 
-test whether Jsoup could get element from the elements array:
+Test whether Jsoup could get element from the elements array:
 
 ```java
 	@Test
@@ -332,7 +338,7 @@ test whether Jsoup could get element from the elements array:
     }
 ```
 
-test whether Jsoup could return correct answer when we input a wrong tag:
+Test whether Jsoup could return correct answer when we input a wrong tag:
 
 ```java
     @Test
@@ -343,7 +349,7 @@ test whether Jsoup could return correct answer when we input a wrong tag:
     }
 ```
 
-test whether Jsoup could get xml's attribution: 
+Test whether Jsoup could get xml's attribution: 
 
 ```java
 @Test
@@ -358,7 +364,7 @@ public void parsesSimpleDocumentElementAttr() {
 }
 ```
 
-test whether a very large tag name can be parse by Jsoup:
+Test whether a very large tag name can be parse by Jsoup:
 
 ```java
 @Test 
