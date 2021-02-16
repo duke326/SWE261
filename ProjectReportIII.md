@@ -185,8 +185,6 @@ Four, Five and Six. function `TokenQueueTest` improve `peek()`, `addFirst()`, `m
 
 ```
 
-
-
 ## Reference
 
 https://www.softwaretestingclass.com/what-is-structural-testing/
