@@ -2,16 +2,17 @@
 
 ### Introduction to Finite State Machines
 
-Finite state machines (or FSMs) can be constructed prior to or independent of source code. 
+The finite state machine (or FSM) can be constructed before the source code or independently of the source code. A finite state machine (or FSM) can be used as a specification for allowed behavior.
 
-- Can serve as a specification of allowed behavior.
+A finite state machine is a set of states and a set of transitions.
 
-A finite state machine is a set of states and a set of transitions. 
+A finite state machine is a directed graph.
 
--  A directed graph. 
-- Node represents a program state. 
-- Edge represents an operation that transforms one program state to another. Usually are labeled with a program operation, condition, or event. 
-- Since infinitely many states, an FSM must be an abstraction.
+A finite state machine is a node that represents the state of a program.
+
+Edge represents the operation of transforming one program state into another program state. Usually marked with program operations, conditions or events.
+
+Due to countless states, FSM must be abstract.
 
 ### The reason why finite models are useful for testing
 
@@ -24,12 +25,12 @@ Using finite models, we can draw a state transition tables. These transition tab
 5. After analyzing the branches, we can test in more detailed and more targeted way.
 6. When encountered with bug, we can target at which branch has the bugs.  
 
-### Choose a feature or component that lends itself well to being described by a non-trivial functional model
+### Choose a feature
 
-In our project `JSoup`, it is a Java library for working with real-world HTML/XML. In functional model, we extracted two features from `JSoup`.
+In our project `JSoup`, it is a Java library for processing actual HTML/XML. In the functional model, we extracted two features from `JSoup`.
 
-* scrape and [parse](https://jsoup.org/cookbook/input/parse-document-from-string) HTML from a URL, file, or string
-* manipulate the [HTML/XML elements](https://jsoup.org/cookbook/modifying-data/set-html), attributes, and text.
+* scrape and [parse](https://jsoup.org/cookbook/input/parse-document-from-string) HTML/XML
+* manipulate the [HTML/XML elements](https://jsoup.org/cookbook/modifying-data/set-html), attributes.
 
 ### Create, draw, and describe that functional model, how it works
 
@@ -44,19 +45,20 @@ In `JSoup ` progress, you can see the process through the picture below.
 
 How to use functional models in `JSoup`
 
-### Write test cases that "cover" the functional model in JUnit. Push it to your Github fork. Also document these in the document. 
+### Write test cases
 
 The test cases are stored in the directory - `/src/test/java/org.jsoup/swe261/FiniteStateMachinesTest.java` 
 
 The files within are written here. 
+
+To see the specific `input_html`, please see our github document.
 
 ```java
 public class FiniteStateMachinesTest {
 
     @Test
     public void String2Document() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
-        Document doc = Jsoup.parse(html);
+        String html = input_html;
         String expStr = "<body>\n" +
                 " <p>First post! <img src=\"foo.png\"></p>\n" +
                 " <p>Second post! <img src=\"foo2.png\"></p>\n" +
@@ -67,7 +69,7 @@ public class FiniteStateMachinesTest {
 
     @Test
     public void Document2Element() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
         Element ele = doc.body();
         String expStr = "<p>First post! <img src=\"foo.png\"></p>";
@@ -79,7 +81,7 @@ public class FiniteStateMachinesTest {
 
     @Test
     public void Element2Elements() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
         Element ele = doc.body();
         Elements eles = ele.children();
@@ -89,7 +91,7 @@ public class FiniteStateMachinesTest {
 
     @Test
     public void Document2Elements() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
         Elements eles = doc.getElementsByTag("p");
         int exp = 2;
@@ -98,7 +100,7 @@ public class FiniteStateMachinesTest {
 
     @Test
     public void Elements2Element() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
         Elements eles = doc.getElementsByTag("p");
         String expStr = "<p>First post! <img src=\"foo.png\"></p>";
@@ -109,7 +111,7 @@ public class FiniteStateMachinesTest {
 
     @Test
     public void Element2Attr() {
-        String html = "<html><head><title>First!</title></head><body><p class=\"foo > bar\">First post! <img src=\"foo.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
 
         // need a better way to verify these:
@@ -129,7 +131,7 @@ To explain these code,
 ```java
 	@Test
     public void String2Document() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
         String expStr = "<body>\n" +
                 " <p>First post! <img src=\"foo.png\"></p>\n" +
@@ -145,7 +147,7 @@ Reversely, `Document` can transfer to HTML/XML
 ```java
 @Test
     public void Document2Element() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
         Element ele = doc.body();
         String expStr = "<p>First post! <img src=\"foo.png\"></p>";
@@ -161,7 +163,7 @@ Reversely, `Document` can transfer to HTML/XML
 ```java
 @Test
     public void Element2Elements() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
         Element ele = doc.body();
         Elements eles = ele.children();
@@ -175,7 +177,7 @@ Reversely, `Document` can transfer to HTML/XML
 ```java
 @Test
     public void Elements2Element() {
-        String html = "<html><head><title>First!</title></head><body><p>First post! <img src=\"foo.png\" /></p><p>Second post! <img src=\"foo2.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
         Elements eles = doc.getElementsByTag("p");
         String expStr = "<p>First post! <img src=\"foo.png\"></p>";
@@ -190,7 +192,7 @@ Reversely, `Document` can transfer to HTML/XML
 ```java
 @Test
     public void Element2Attr() {
-        String html = "<html><head><title>First!</title></head><body><p class=\"foo > bar\">First post! <img src=\"foo.png\" /></p></body></html>";
+        String html = input_html;
         Document doc = Jsoup.parse(html);
 
         // need a better way to verify these:

@@ -6,9 +6,11 @@ We are testing the tool called jsoup. Our Github link is https://github.com/duke
 
 ## What is its purpose?
 
-**jsoup** is a Java library for working with real-world HTML. It provides a very convenient API for fetching URLs and extracting and manipulating data, using the best of HTML5 DOM methods and CSS selectors.
+**jsoup** is a Java library for working with real-world HTML/XML. 
 
-**jsoup** implements the [WHATWG HTML5](https://html.spec.whatwg.org/multipage/) specification, and parses HTML to the same DOM as modern browsers do.
+It uses the best DOM method of HTML5 and CSS selector to provide a very convenient API for obtaining URLs and extracting and processing data.
+
+**jsoup** implements the [WHATWG HTML5](https://html.spec.whatwg.org/multipage/) specification, and parses HTML to the same DOM as modern browsers.
 
 * scrape and [parse](https://jsoup.org/cookbook/input/parse-document-from-string) HTML from a URL, file, or string
 * find and [extract data](https://jsoup.org/cookbook/extracting-data/selector-syntax), using DOM traversal or CSS selectors
@@ -16,9 +18,7 @@ We are testing the tool called jsoup. Our Github link is https://github.com/duke
 * [clean](https://jsoup.org/cookbook/cleaning-html/safelist-sanitizer) user-submitted content against a safe-list, to prevent XSS attacks
 * output tidy HTML
 
-jsoup is designed to deal with all varieties of HTML found in the wild; from pristine and validating, to invalid tag-soup; jsoup will create a sensible parse tree.
-
-See [**jsoup.org**](https://jsoup.org/) for downloads and the full [API documentation](https://jsoup.org/apidocs/).
+jsoup is designed to handle all kinds of HTML/XML found; from raw and verified to invalid tag soup; jsoup will create a wise parse tree.
 
 ## Any other aspects that are relevant
 
@@ -44,15 +44,13 @@ Language: 100% of Java
 
 ## Fork & Add
 
-Fork your project into GitHub. Add all your team members to the forked project, add Prof. Jones and TA Maruf as collaborators.
 
-Our link is here: https://github.com/duke326/SWE261.
+
+Our link is here: https://github.com/duke326/SWE261. We have all of our team members, Lai Wang, Sun Yu and Xinyi Hu in the repo. Also we have included Prof. Jones and TA Maruf.
 
 ## Build
 
-Document its build. What did you need to do to get it built and running?
-
-This project used Maven as the build infrastructure for Java projects. Maven uses conventions and patterns to provide a uniform build system. All Maven projects use a shared set of plugins that are retrieved from the Maven repository and Maven executes a defined series of tasks as part of the lifecycle when building the project. 
+This project uses Maven as the build infrastructure for Java projects. Maven uses rules and patterns to provide an integrated build system. Every Maven project uses a set of shared plugins retrieved from the Maven repository, and when the project is built, Maven performs a set of predefined tasks throughout its life cycle.
 
 ### Using IntellJ to open Maven project
 
@@ -72,98 +70,9 @@ When the progress bar is full, you can run any test case in the test folder.
 
 #### Setup for using JUnit 5
 
-Usage of JUnit 5 with Maven
-
 To use Maven you have to use updated version for your build plug-ins and add several dependencies.
 
-The following example shows how to use JUnit 5 with Maven.
-
-```java
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
-
-    <!--1 -->
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.2</version>
-            </plugin>
-        </plugins>
-    </build>
-
-    <!--2 -->
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.6.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-```
-
-To make it easier for your to apply this, a full pom is displayed, in your project the groupId, artifactId and version would be different.
-
-```java
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.vogella</groupId>
-    <artifactId>com.vogella.junit5</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
-
-    <!--1 -->
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.2</version>
-            </plugin>
-        </plugins>
-    </build>
-
-    <!--2 -->
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.6.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-</project>
-```
+To use JUnit 5 with Maven, we need to change `pom.xml`. In the `pom.xml`, you nd to add its plugin as `maven-surefire-plugin`, and its version is `2.22.2`. To see how to write that, please refer to our code in the line 221-241. 
 
 #### Sample to run
 
@@ -177,8 +86,6 @@ Press the little green run button, the output would be like this:
 
 ## Test cases
 
-Document the existing test cases (JUnit or otherwise). This should be a study of the existing testing practices and frameworks that are used already in the system. (This section might evolve as we learn more throughout the quarter.) How do you run them?
-
 Firstly, the existing test case is **black box testing**. In IEEE, black box testing means that one kind of testing that ignores the internal mechanism of a system or component and focuses solely on the outputs generated in response to selected inputs and execution conditions.
 
 Black box testing is also known as functional testing. Black box testing derive sets of inputs that will fully exercise all of the functional requirements of a system.
@@ -187,11 +94,11 @@ In our project, it used **JUnit**. *JUnit 5* is the next generation of JUnit. Th
 
 ### Introduction into JUnit
 
-A JUnit *test* is a method contained in a class which is only used for testing. This is called a *Test class*. To define that a certain method is a test method, annotate it with the `@Test` annotation.
+JUnit *test* is a method contained in a class that is only used for testing. This is called *test category*. To define a specific method as a test method, please annotate the method with `@Test`.
 
-This method executes the code under test. You use an *assert* method, provided by JUnit or another assert framework, to check an expected result versus the actual result. These calls are typically called *asserts* or *assert statements*.
+This method executes the code under test. Use the *assert* method provided by JUnit or other assert frameworks to compare the expected result with the actual result. These calls are usually called *assert* or *assert statement*.
 
-Assert statements typically allow to define messages which are shown if the test fails. You should provide here meaningful messages to make it easier for the user to identify and fix the problem. This is especially true if someone looks at the problem, who did not write the code under test or the test code.
+The assert statement can usually define the message that will be displayed if the test fails. You should provide meaningful messages here to help users identify and resolve issues. This is especially true if the code under test or someone who did not write the test code sees the problem.
 
 #### Existing test cases
 
@@ -275,42 +182,25 @@ This Test class contains many unit test to validate the **Tag** and test the fun
 
 
 
-#### Sample JUnit annotations
-
-| notation                  | Description                                                  |
-| :------------------------ | :----------------------------------------------------------- |
-| `@Test`                   | Identifies a method as a test method.                        |
-| `@Disabled("reason")`     | Disables a test method with an option reason.                |
-| `@BeforeEach`             | Executed before each test. Used to prepare the test environment, e.g., initialize the fields in the test class, configure the environment, etc. |
-| `@AfterEach`              | Executed after each test. Used to cleanup the test environment, e.g., delete temporary data, restore defaults, cleanup expensive memory structures. |
-| `@DisplayName("<Name>")`  | <Name> that will be displayed by the test runner. In contrast to method names the name can contain spaces to improve readability. |
-| `@RepeatedTest(<Number>)` | Similar to `@Test` but repeats the test a <Number> of times  |
-| `@BeforeAll`              | Annotates a method which is executed once, before the start of all tests. It is used to perform time intensive activities, for example, to connect to a database. Methods marked with this annotation need to be defined as `static` to work with JUnit. |
-| `@AfterAll`               | Annotates a method which is executed once, after all tests have been finished. It is used to perform clean-up activities, for example, to disconnect from a database. Methods annotated with this annotation need to be defined as `static` to work with JUnit. |
-| `@TestFactory`            | Annotates a method which is a Factory for creating dynamic tests |
-| `@Nested`                 | Lets you nest inner test classes to force a certain execution order |
-| `@Tag("<TagName>")`       | Tags a test method, tests in JUnit 5 can be filtered by tag. E.g., run only tests tagged with "fast". |
-| `@ExtendWith`             | Lets you register an Extension class that adds functionality to the tests |
-
 # **Partitioning**
 
 In class, we talked about six general engineering principles. One of them is **partition**, which means that divide and conquer.
 
-## Motivate the need for systematic functional testing and partition testing.
+## The need for systematic functional testing and partition testing.
 
-In our class, “Functional testing” usually implies systematic testing. We use functional testing instead of random or uniform testing is **to find needles and remove them from hay.** In detail, failures are sparse in the space of possible inputs, but dense in some parts of the space. If we systematically test some cases from each part, we will include the dense parts.
+In our class, “Functional testing” usually implies systematic testing. We use functional testing instead of random or uniform testing is **to find needles and remove them from hay.** In detail, failures are rare in the space of possible inputs, but are densely populated in a certain small space. If we systematically test some cases from each part, we will include the dense parts.
 
 ## Describe these concepts.
 
 Functional testing: Deriving test cases from program specifications.
 
-Systematic testing: Try to select inputs that are especially valuable. Usually by choosing representatives of classes that are apt to fail often or not at all.
+Systematic testing: Try to choose particularly valuable input. Usually, by selecting class representatives who tend to fail often or not at all.
 
-Partition testing: separates the input space into classes whose union is the entire space — “Equivalence Partition”.
+Partition testing: The input space is divided into classes that merge into the entire space-"equivalent partitions".
 
-## Then, select a feature that allows for partitioning.
+## A feature that allows for partitioning.
 
-In jsoup project, we have XML parser and HTML parser, but in test cases, jsoup only has HTML parser test. Therefore, we decided to choose XML parser and test the functions in XML parser. 
+In `JSoup` project, we have XML parser and HTML parser, but in test cases, jsoup only has HTML parser test. Therefore, we decided to choose XML parser and test the functions in XML parser. 
 
 ## Specify your partitions (and boundaries when appropriate) in English — describe them.
 
@@ -320,7 +210,7 @@ In test case, we try to figure out whether Jsoup can process the correct xml str
 
 For boundaries, we talked about Leap Year in class, and its boundaries are range of years and certain set of years, like 2000. For our case, we don't have ranges of xml. Then we figure out that we can use the length of each xml file as ranges. Also, we try boundaries case like xml with large tag name case. 
 
-## Then, write **new test cases** in JUnit, and describe and document those test cases and how they run.
+## Write **new test cases** in JUnit
 
 Test whether Jsoup could get elements from the tag we assign:
 

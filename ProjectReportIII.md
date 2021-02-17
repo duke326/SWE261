@@ -2,90 +2,40 @@
 
 ### Introduction to structural testing
 
-**Structural testing** is the type of testing carried out to test the structure of code. It is also known as [White Box testing](https://www.softwaretestingclass.com/white-box-testing/) or [Glass Box testing](https://www.softwaretestingclass.com/gray-box-testing/). This type of testing requires knowledge of the code, so, it is mostly done by the developers. It is more concerned with how the system does it rather than the functionality of the system. It provides more coverage for the testing. For example, to test certain error messages in an application, we need to test the trigger condition for it, but there must be many triggers for it. It is possible to miss out on one while testing the requirements drafted in SRS. But using this testing, the trigger is most likely to be covered since structural testing aims to cover all the nodes and paths in the structure of code.
+**Structural testing** is the type of testing performed to test the structure of the code. Also called white box test or glass box test. This type of testing requires knowledge of the code, so in most cases it is done by the developer. It is more concerned with how the system works, rather than the function of the system. It provides more coverage for testing. 
 
-It is complementary to [Functional Testing](https://www.softwaretestingclass.com/functional-testing/). Using this technique the test cases drafted according to system requirements can be first analyzed and then more test cases can be added to increase the coverage. It can be used on different levels such as unit testing, component testing, integration testing, functional testing, etc. It helps in performing thorough testing on software. The structural testing is mostly automated.
-
-#### Structural Testing Techniques:
-
-- **Statement Coverage -** This technique is aimed at exercising all programming statements with minimal tests.
-- **Branch Coverage -** This technique is running a series of tests to ensure that all branches are tested at least once.
-- **Path Coverage -** This technique corresponds to testing all possible paths which means that each statement and branch are covered.
-
-#### Calculating Structural Testing Effectiveness:
-
-```
-Statement Testing = (Number of Statements Exercised / Total Number of Statements) x 100 %
-
-Branch Testing = (Number of decisions outcomes tested / Total Number of decision Outcomes) x 100 %
-
-Path Coverage = (Number paths exercised / Total Number of paths in the program) x 100%
-```
+It is a supplement to functional testing. Using this technology, you can first analyze test cases drafted according to system requirements, and then you can add more test cases to increase coverage. It helps to test the software comprehensively. Most structural testing is automated.
 
 #### Advantage
 
-- Provides a more thorough testing of the software.
-- Helps finding out defects at an early stage.
-- Helps in eliminating dead code.
-- Not time consuming as it is mostly automated.
+- Gives a more exhausted testing for the software.
+- Helps you find defects as early as possible.
+- Helps eliminate invalid codes.
+- No time wasted, because it is mostly automated.
 
 #### Disadvantage
 
-- Requires knowledge of the code.
-- Requires training in the tool used for testing
+- Need to understand the code.
+- Need to use test tools for training
 - It is expensive.
 
-### Coverage tool
+### Coverage tool we use
 
-For the test suite for your project, run a coverage tool. Document the coverage of the existing test suite (before you add any further test cases than what you have already added). Report various coverage measures, such as line, branch, and method coverage. Document some parts of the code that are currently uncovered by the existing test suite.
+**JaCoCo** is a code coverage library for Java, which was created by the EclEmma team based on years of experience in using and integrating existing libraries.
 
-**JaCoCo** is a free code coverage library for Java, which has been created by the EclEmma team based on the lessons learned from using and integration existing libraries for many years.
+Compared with Eclemma used in the class, JaCoCo is also produced by the same company and have mostly the same functions. We tried other tools as well mentioned in the reference, but they do not work as good as JaCoCo, for example, cuberuto. It can produce a html website page to tell you the coverage for classes, methods and etc. Example as belows. It seems very neat and clear. 
 
 ![image.png](https://i.loli.net/2021/02/16/g6s89uhmTVwc5kn.png)
 
 #### How to add Jacoco?
 
-Go to our maven project, find our `pom.xml` file, and add belows.
+Go to our maven project, find our `pom.xml` file, and add as in the file. In the file, group id is `org.jacoco`, artifactid is `jacoco-maven-plugin`, version is `0.8.3`.
 
-```xml
-<plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.3</version>
-        <configuration>
-          <includes>
-            <include>**/**/*</include>
-          </includes>
-        </configuration>
-        <executions>
-          <execution>
-            <id>pre-test</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>post-test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-```
-
-The meaning of the stars is very important, otherwise, you cannot test our project.
-
-```
-*   Match zero or more characters
-**  Match zero or more directories
-?   Match a single character
-```
+The meaning of the stars is very important, otherwise, you cannot test our project. `**`  is to match the folders or directories. `*`  is to match >=0 characters
 
 #### Coverage for JSoup
 
-We want to focus on `org.jsoup.parser`, and its coverage is below, such as line, branch, and method coverage.
+We want to focus on `org.jsoup.parser`, and its coverage is below, such as line, branch, and method coverage. We put it into a table. Unfortunately, JaCoCo didn't provide the exact number for missed or total for branch, but only its coverage. 
 
 | measures | missed | total | coverage |
 | -------- | ------ | ----- | -------- |
@@ -93,17 +43,21 @@ We want to focus on `org.jsoup.parser`, and its coverage is below, such as line,
 | branch   | N/A    | N/A   | 75%      |
 | method   | 36     | 550   | 93%      |
 
+One interesting function for **JaCoCo** is that it can mention the percentage of coverage for methods and lines in the JetBrain Idea file. So, as you can see, this is the example for parser file and its coverage for methods and lines. 
+
 ![image.png](https://i.loli.net/2021/02/16/WJp7oEGSN2wsKrC.png)
 
-For `parser` folder, we focus on `ParseErrorList`, which only has 66% methods, 70% lines covered. `Parser` only has 77% methods, 77% lines covered. `TokenQueue` only has 65% methods, 75% lines covered. To improve this, we write new test cases afterwards. 
+For `parser` folder, we focus on `ParseErrorList`, which only has 66% methods, 70% lines covered. `Parser` only has 77% methods, 77% lines covered. `TokenQueue` only has 65% methods, 75% lines covered. To improve this, we write new test cases afterwards. Parser is the core function for JSoup, because JSoup uses it to parse the HTML or XML file into its own classes. Using parser, you can get its elements, and attributes, which is very important and vital.
 
 ### New test case 
 
-Write new test cases to improve the coverage of the existing test suite in a meaningful way. Ideally, increase the coverage by at least 50 lines of code, or more. Document the coverage before and after, describe the code that you covered with your new test cases, and describe what functionality they test.
-
 We put our improvement code in the folder `/src/test/java/org.jsoup/parser/ParseImprove.java`. Compared with the former method and coverage, this time, the result is much more improved. 
 
+Also, using the interesting function mentioned above, it can show the percentage of coverage for methods and lines for the parser folder.
+
 ![image.png](https://i.loli.net/2021/02/16/5kqLbAPyVMN3RSH.png)
+
+The coverage before and after are documented in the table below. 
 
 | Function       | METHOD before | method after | line before | line after |
 | -------------- | ------------- | ------------ | ----------- | ---------- |
@@ -194,6 +148,4 @@ https://www.tutorialspoint.com/software_testing_dictionary/structural_testing.ht
 https://stackify.com/code-coverage-tools/
 
 https://www.eclemma.org/jacoco/
-
-https://www.cnblogs.com/fnlingnzb-learner/p/10637802.html
 
