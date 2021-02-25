@@ -247,7 +247,7 @@ In test case, we try to figure out whether `Jsoup` can process the correct xml s
 
 For boundaries, we talked about Leap Year in class, and its boundaries are range of years and certain set of years, like 2000. For our case, we don't have ranges of xml. Then we figure out that we can use the **length** of each xml file as ranges. Also, we try boundaries case like xml with large tag name case. 
 
-### Write **new test cases** in JUnit
+#### Write **new test cases** in JUnit
 
 Test whether `Jsoup` could get elements from the tag we assign:
 
@@ -740,7 +740,7 @@ And the `build passing` is appeared in our repository.
 
 ![image.png](https://i.loli.net/2021/02/23/pLM47xtl5avms1B.png)
 
-Awesome! It;s more like a professional code repository. 
+Awesome! It's more like a professional code repository. 
 
 
 

@@ -2,17 +2,17 @@
 
 ### Introduction to Finite State Machines
 
-The finite state machine (or FSM) can be constructed before the source code or independently of the source code. A finite state machine (or FSM) can be used as a specification for allowed behavior.
+What is finite state machine? According to wikipedia, the finite state machine (or FSM) can be constructed before the source code or independently of the source code. A finite state machine (or FSM) can be used as a specification for allowed behavior. It has five important components. 
 
-A finite state machine is a set of states and a set of transitions.
+- A finite state machine is a set of states and a set of transitions.
 
-A finite state machine is a directed graph.
+- A finite state machine is a directed graph.
 
-A finite state machine is a node that represents the state of a program.
+- A finite state machine is a node that represents the state of a program.
 
-Edge represents the operation of transforming one program state into another program state. Usually marked with program operations, conditions or events.
+- Edge represents the operation of transforming one program state into another program state. Usually marked with program operations, conditions or events.
 
-Due to countless states, FSM must be abstract.
+- Due to countless states, FSM must be abstract.
 
 ### The reason why finite models are useful for testing
 
