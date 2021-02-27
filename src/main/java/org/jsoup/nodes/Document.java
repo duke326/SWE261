@@ -29,6 +29,9 @@ public class Document extends Element {
     private final String location;
     private boolean updateMetaCharset = false;
 
+    // Lai
+    private Element ele;
+
     /**
      Create a new, empty Document.
      @param baseUri base URI of document
@@ -39,6 +42,13 @@ public class Document extends Element {
         super(Tag.valueOf("#root", ParseSettings.htmlDefault), baseUri);
         this.location = baseUri;
         this.parser = Parser.htmlParser(); // default, but overridable
+    }
+
+    public Document(String baseUri,Element htmlNode) {
+        super(Tag.valueOf("#root", ParseSettings.htmlDefault), baseUri);
+        this.location = baseUri;
+        this.parser = Parser.htmlParser(); // default, but overridable
+        this.ele = htmlNode;
     }
 
     /**
@@ -99,8 +109,10 @@ public class Document extends Element {
     /**
      Find the root HTML element, or create it if it doesn't exist.
      @return the root HTML element.
+     lai change it from private to public
      */
-    private Element htmlEl() {
+
+    public Element htmlEl() {
         for (Element el: childElementsList()) {
             if (el.normalName().equals("html"))
                 return el;
@@ -125,6 +137,18 @@ public class Document extends Element {
         return html.prependElement("head");
     }
 
+    //lai
+    public Element head2() {
+        //Element html = htmlEl();
+        for (Element el: ele.childElementsList()) {
+            //System.out.println(el.normalName());
+            if (el.normalName().equals("head"))
+                //System.out.println(el);
+                return el;
+        }
+        return ele.prependElement("head");
+    }
+
     /**
      Get this document's {@code <body>} or {@code <frameset>} element.
      <p>
@@ -141,6 +165,16 @@ public class Document extends Element {
                 return el;
         }
         return html.appendElement("body");
+    }
+
+    //lai
+    public Element body2() {
+        //Element html = htmlEl();
+        for (Element el: ele.childElementsList()) {
+            if ("body".equals(el.normalName()) || "frameset".equals(el.normalName()))
+                return el;
+        }
+        return ele.appendElement("body");
     }
 
     /**
@@ -200,6 +234,24 @@ public class Document extends Element {
         return this;
     }
 
+
+    // Lai
+    public Element normaliseDocumentNodes() {
+        //Element htmlEl = htmlEl(); // these all create if not found htmlNode
+
+        Element head = head2();
+        body2();
+        // pull text nodes out of root, html, and head els, and push into body. non-text nodes are already taken care
+        // of. do in inverse order to maintain text order.
+        normaliseTextNodes2(head);
+        normaliseTextNodes2(ele.htmlel());
+        normaliseTextNodes2(this);
+
+        ensureMetaCharsetElement();
+
+        return this.ele.htmlel();
+    }
+
     // does not recurse.
     private void normaliseTextNodes(Element element) {
         List<Node> toMove = new ArrayList<>();
@@ -216,6 +268,24 @@ public class Document extends Element {
             element.removeChild(node);
             body().prependChild(new TextNode(" "));
             body().prependChild(node);
+        }
+    }
+
+    private void normaliseTextNodes2(Element element) {
+        List<Node> toMove = new ArrayList<>();
+        for (Node node: element.childNodes) {
+            if (node instanceof TextNode) {
+                TextNode tn = (TextNode) node;
+                if (!tn.isBlank())
+                    toMove.add(tn);
+            }
+        }
+
+        for (int i = toMove.size()-1; i >= 0; i--) {
+            Node node = toMove.get(i);
+            element.removeChild(node);
+            body2().prependChild(new TextNode(" "));
+            body2().prependChild(node);
         }
     }
 

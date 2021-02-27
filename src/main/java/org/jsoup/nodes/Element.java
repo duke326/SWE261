@@ -49,6 +49,9 @@ public class Element extends Node {
     List<Node> childNodes;
     private @Nullable Attributes attributes; // field is nullable but all methods for attributes are non null
 
+    public Element htmlel(){
+        return this;
+    }
     /**
      * Create a new, standalone element.
      * @param tag tag name
@@ -328,7 +331,7 @@ public class Element extends Node {
      * TODO - think about pulling this out as a helper as there are other shadow lists (like in Attributes) kept around.
      * @return a list of child elements
      */
-    List<Element> childElementsList() {
+    public List<Element> childElementsList() {
         if (childNodeSize() == 0)
             return EmptyChildren; // short circuit creating empty
 
