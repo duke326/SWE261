@@ -350,6 +350,55 @@ public class Element extends Node {
         return children;
     }
 
+    // revise
+    /**
+     * Maintains a shadow copy of this element's child elements. If the nodelist is changed, this cache is invalidated.
+     * TODO - think about pulling this out as a helper as there are other shadow lists (like in Attributes) kept around.
+     * @return a list of child elements
+     */    /**
+     * Maintains a shadow copy of this element's child elements. If the nodelist is changed, this cache is invalidated.
+     * TODO - think about pulling this out as a helper as there are other shadow lists (like in Attributes) kept around.
+     * @return a list of child elements
+     */
+    List<Element> childElements() {
+        if (childNodeSize() == 0)
+            return EmptyChildren; // short circuit creating empty
+
+        List<Element> children;
+        if (shadowChildrenRef == null || (children = shadowChildrenRef.get()) == null) {
+            final int size = childNodes.size();
+            children = new ArrayList<>(size);
+            //noinspection ForLoopReplaceableByForEach (beacause it allocates an Iterator which is wasteful here)
+            for (int i = 0; i < size; i++) {
+                final Node node = childNodes.get(i);
+                if (node instanceof Element)
+                    children.add((Element) node);
+            }
+            shadowChildrenRef = new WeakReference<>(children);
+        }
+        return children;
+    }
+
+    // reverse version
+    public List<Element> childElementsV2() {
+        if (childNodeSize() == 0)
+            return EmptyChildren; // short circuit creating empty
+
+        List<Element> children;
+        if (shadowChildrenRef == null || (children = shadowChildrenRef.get()) == null) {
+            final int size = childNodes.size();
+            children = new ArrayList<>(size);
+            //noinspection ForLoopReplaceableByForEach (beacause it allocates an Iterator which is wasteful here)
+            for (int i = 0; i < size; i++) {
+                final Node node = childNodes.get(i);
+                if (node instanceof Element)
+                    children.add((Element) node);
+            }
+            shadowChildrenRef = new WeakReference<>(children);
+        }
+        return children;
+    }
+
     /**
      * Clears the cached shadow child elements.
      */
