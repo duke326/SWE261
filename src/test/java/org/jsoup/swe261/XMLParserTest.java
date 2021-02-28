@@ -1,17 +1,19 @@
-package org.jsoup.parser;
+package org.jsoup.swe261;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.ParseSettings;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 
-import static org.jsoup.parser.CharacterReader.maxBufferLen;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class XMLParserTest {
-
+    static final int maxBufferLen = 1024 * 32; // visible for testing
     public static final String xml="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
             "\n" +
             "<students>\n" +

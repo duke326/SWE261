@@ -49,6 +49,9 @@ public class Element extends Node {
     List<Node> childNodes;
     private @Nullable Attributes attributes; // field is nullable but all methods for attributes are non null
 
+    public Element htmlel(){
+        return this;
+    }
     /**
      * Create a new, standalone element.
      * @param tag tag name
@@ -328,7 +331,56 @@ public class Element extends Node {
      * TODO - think about pulling this out as a helper as there are other shadow lists (like in Attributes) kept around.
      * @return a list of child elements
      */
-    List<Element> childElementsList() {
+    public List<Element> childElementsList() {
+        if (childNodeSize() == 0)
+            return EmptyChildren; // short circuit creating empty
+
+        List<Element> children;
+        if (shadowChildrenRef == null || (children = shadowChildrenRef.get()) == null) {
+            final int size = childNodes.size();
+            children = new ArrayList<>(size);
+            //noinspection ForLoopReplaceableByForEach (beacause it allocates an Iterator which is wasteful here)
+            for (int i = 0; i < size; i++) {
+                final Node node = childNodes.get(i);
+                if (node instanceof Element)
+                    children.add((Element) node);
+            }
+            shadowChildrenRef = new WeakReference<>(children);
+        }
+        return children;
+    }
+
+    // revise
+    /**
+     * Maintains a shadow copy of this element's child elements. If the nodelist is changed, this cache is invalidated.
+     * TODO - think about pulling this out as a helper as there are other shadow lists (like in Attributes) kept around.
+     * @return a list of child elements
+     */    /**
+     * Maintains a shadow copy of this element's child elements. If the nodelist is changed, this cache is invalidated.
+     * TODO - think about pulling this out as a helper as there are other shadow lists (like in Attributes) kept around.
+     * @return a list of child elements
+     */
+    List<Element> childElements() {
+        if (childNodeSize() == 0)
+            return EmptyChildren; // short circuit creating empty
+
+        List<Element> children;
+        if (shadowChildrenRef == null || (children = shadowChildrenRef.get()) == null) {
+            final int size = childNodes.size();
+            children = new ArrayList<>(size);
+            //noinspection ForLoopReplaceableByForEach (beacause it allocates an Iterator which is wasteful here)
+            for (int i = 0; i < size; i++) {
+                final Node node = childNodes.get(i);
+                if (node instanceof Element)
+                    children.add((Element) node);
+            }
+            shadowChildrenRef = new WeakReference<>(children);
+        }
+        return children;
+    }
+
+    // reverse version
+    public List<Element> childElementsV2() {
         if (childNodeSize() == 0)
             return EmptyChildren; // short circuit creating empty
 
