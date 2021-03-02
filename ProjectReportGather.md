@@ -326,17 +326,17 @@ public void handleSuperLargeTagNames() {
 
 ### Introduction to Finite State Machines
 
-The finite state machine (or FSM) can be constructed before the source code or independently of the source code. A finite state machine (or FSM) can be used as a specification for allowed behavior.
+What is finite state machine? According to wikipedia, the finite state machine (or FSM) can be constructed before the source code or independently of the source code. A finite state machine (or FSM) can be used as a specification for allowed behavior. It has five important components. 
 
-A finite state machine is a set of states and a set of transitions.
+- A finite state machine is a set of states and a set of transitions.
 
-A finite state machine is a directed graph.
+- A finite state machine is a directed graph.
 
-A finite state machine is a node that represents the state of a program.
+- A finite state machine is a node that represents the state of a program.
 
-Edge represents the operation of transforming one program state into another program state. Usually marked with program operations, conditions or events.
+- Edge represents the operation of transforming one program state into another program state. Usually marked with program operations, conditions or events.
 
-Due to countless states, FSM must be abstract.
+- Due to countless states, FSM must be abstract.
 
 ### The reason why finite models are useful for testing
 
@@ -740,9 +740,227 @@ And the `build passing` is appeared in our repository.
 
 ![image.png](https://i.loli.net/2021/02/23/pLM47xtl5avms1B.png)
 
-Awesome! It's more like a professional code repository. 
+Awesome! It;s more like a professional code repository. 
 
+## Part V: Testable Design
 
+### Introduction to Testable Design
+
+What is testable design? The basic value proposition of testable design is to be able to test code better. As Roy Osherove said[1], testable design is “a given piece of code should be easy and quick to write a unit test against.”
+
+### Guidelines for Testable Design
+
+After talking about the concept of testable design, you might still have question on how to make a testable design. There are some rules to follow as below. 
+
+- In testable design, we need to avoid complex `private` methods. The reason for this rule is quite clear. In Java, we cannot test with `private` methods. Under this circumstance, when there are some complex `private` methods, we cannot test with them.
+- In testable design, we need to avoid `static` methods. The reason for this rule is also Java's definitions. In Java, `static` method operate on the class instead of the object. 
+- In testable design, we need to be careful to hardcode in `new`. If so, object cannot be stubbed. 
+- In testable design, we need to avoid logic in constructors. It's difficult to bypass a constructor because subclass constructors always trigger at least one superclass constructor.
+- In testable design, we need to avoid singleton pattern. 
+
+### JSoup testable design
+
+In the `JSoup` functions, in the folder `src/main/java/org.jsoup/nodes/Element`, we have this function called `childElements`. As we talked about in the Guidelines for Testable Design section, we try to avoid complex `private` method because we cannot test with them. In this function, we also have this function is private so it cannot be tested.
+
+Original Code is as following. 
+
+```java
+	List<Element> childElements() {
+        return children;
+    }
+```
+
+To change it into a testable design, we set it into `public`, and the new function name is set to ``. 
+
+To write new test case for our testable design, we put that into `src/test/java/org.jsoup/swe261`. The test function is called `TestableDesign.java`
+
+```java
+@Test
+    public void childListTest(){
+        String html = ""; // To see the original html string, please refer to our code 
+        Document doc = Jsoup.parse(html);
+        Element ele = doc.body();
+        System.out.println(ele.childElementsV2().get(0));
+        System.out.println(ele.childElementsV2().get(1));
+        String exp = "<p>First post! <img src=\"foo.png\"></p>";
+        String exp2 = "<p>Second post! <img src=\"foo2.png\"></p>";
+        assertEquals(2,ele.childElementsV2().size());
+        assertEquals(exp,ele.childElementsV2().get(0).toString());
+        assertEquals(exp2,ele.childElementsV2().get(1).toString());
+    }
+```
+
+### Introduction to Mocking
+
+What is mocking? To understand mocking, we firstly need to understand the word "**mock**" - A fake object that decides whether a unit test has passed or failed by watching interactions between objects.
+
+### Importance of Mocking
+
+After talking about the basic concepts of mocking, we come to the question why we need mocking. Combined with its concept, we concluded four reasons of necessity of mocking.
+
+- Mocking process can simulate external dependencies. Without mocking, if a test case fails, we don't know whether the failure is because of our code unit or because of our code dependencies. 
+- Mocking process can promote the interaction between objects. 
+- During development, mocking can help developers start testing early because mocking also support demos and evaluations. All units of the project can be carried out in parallel without having to wait for everyone to be ready.
+- Mocking can help us avoid repeating test code in similar tests.
+
+### Mock JSoup Now!
+
+#### Mock with function normaliseDocumentNodes
+
+The feature we chose to mock JSoup is `normaliseDocumentNodes`. This function's original code is as follows.
+
+```java
+public Element normaliseDocumentNodes() {
+        //Element htmlEl = htmlEl(); // these all create if not found htmlNode
+
+        Element head = head2();
+        body2();
+        // pull text nodes out of root, html, and head els, and push into body. non-text nodes are already taken care
+        // of. do in inverse order to maintain text order.
+        normaliseTextNodes2(head);
+        normaliseTextNodes2(ele.htmlel());
+        normaliseTextNodes2(this);
+
+        ensureMetaCharsetElement();
+
+        return this.ele.htmlel();
+    }
+```
+
+But, wait. Why we need mocking to test with this function, not other methods? 
+
+As we mentioned in the "Importance of Mocking" section, the third reason is that mocking can help developers start testing early. To test with this function, we need `element`, which is external dependency. What are we testing? The interaction between `element` and `document`. Theoretically, if we want to test with this function, we need to test with element first. If element is invalid, we cannot test with this function. But, using mocking, we can test with this function easily because we already know the output of element!
+
+#### Test with function normaliseDocumentNodes now
+
+The feature we chose to mock JSoup is `normaliseDocumentNodes`. 
+
+Firstly, we set up this test and use `mock` function here.
+
+```java
+@Before
+    public void setup() {
+        ele = mock(Element.class);
+        doc = new Document("<html></html",ele);
+        MockitoAnnotations.initMocks(this);
+    }
+```
+
+Then we get to test this function by mockito. We used the function
+
+- `when` is to set the return value
+- `assert` is to judge if the result is equal
+- `verify` is to verify how many times the function runed
+
+The code is as following
+
+```java
+@Test
+    public void mockitoTest1(){
+        String exp = "";//To see the original html string, please refer to our code 
+        when(ele.childElementsList()).thenReturn(getEleList());
+        when(ele.htmlel()).thenReturn(getEle());
+        System.out.println(doc.normaliseDocumentNodes());
+        assertThat(doc.normaliseDocumentNodes().toString()).isEqualTo(exp);
+        verify(ele, times(4)).childElementsList();
+        verify(ele, times(4)).htmlel();
+    }
+```
+
+## Part VI: Static Analyzers
+
+### Introduction to Static Analysis
+
+What is a static analysis? Usually, static analysis means code review. In companies, especially in one project, colleagues will review your code manually. 
+
+- In one word, static analysis is mostly informal manual-human reviews of code.
+- Also called "code reviews" or "compile-time analysis".
+
+During our experience in `JSoup` project, we fork our project into our own repository and pull request into the master. One or two of our collaborators will peer view the PR code, give it some advice or directly merge it into the master. 
+
+There are best practices for the process of static analyzers.
+
+1. Review small portions of code at a time
+2. Record all feedback
+3. Review code independently before gathering to discuss
+4. Use checklists
+
+### Importance of Static Analysis
+
+After talking about the basic concepts of static analysis, we come to the question why we need static analysis.  Combined with its basic concepts, we concluded reasons of necessity of static analysis.
+
+- Static analysis can help you find potential bugs early. Using static analysis, your code reviewers can help you find these bugs manually.
+- Static analysis can help you stick to the same coding style or coding standard. Since more than one people are involved in one function or one line of code, the clarity of code will increase. In my opinion, to raise the possibility of merging code, you are not the only one who sees the code so that you need to make more comments and try to make the code neat and clear. 
+- Static analysis can help team collaboration. Your team need to involve in the same project and be responsible for every line of code. To achieve that, your team members must discuss more often and share your ideas on code. 
+
+### Tools for Static Analysis
+
+We used two different static analyzers on our project `JSoup`.
+
+The first one is **SpotBugs**. SpotBugs is a program that uses static analysis to find errors in Java code.
+
+The second one is **Checkstyle**. Checkstyle is a development tool that helps programmers write Java code that meets coding standards. Sample coding standard: google coding style or sun check. 
+
+### Results of Static Analysis by Spotbugs and Checkstyle
+
+#### CheckStyle
+
+Firstly, we used the checkstyle tool. I pressed the "Check Module" button and the result is as below. This used the sun checks method. 
+
+![image.png](https://i.loli.net/2021/03/02/Gze3rEZkjBswlYg.png)
+
+The following picture used the google checks method.
+
+![image.png](https://i.loli.net/2021/03/02/8BWXQgynmVxivzf.png)
+
+##### Deep dive into some errors
+
+The first error I met with is `CustomImportError`. Actually it emphasised on the order of import, not an actual bug that you will see in the command line. 
+
+The second error I met with is `Indentation`. It used 4 tabs instead of 2 tabs. 
+
+The third error I met with is `RequiredEmptyLineBeforeBlockTagGroup`. It requires us to have an empty line before tag `@Return`. 
+
+From my perspective, these errors existed, but they aren't actual problems in the code. They are more likely to be the coding style error instead of bugs.
+
+![image.png](https://i.loli.net/2021/03/02/wioanjmNOC1b5GQ.png)
+
+#### Spotbugs
+
+Next, we used the spotbugs tool. Different from the checkstyle tool, it is divided into folders and each java file, and it will spotlights the lines and functions or classes that has some type error or bugs. 
+
+![image.png](https://i.loli.net/2021/03/02/kgB1MNfmAYuXLGK.png)
+
+##### Deep dive into some errors
+
+The first error in **correctness** is that non-null field is not initialized. From my perspective, it is mentioning that `JSoup` didn't initialize the parameter for the class `DatasetIterator`
+
+![image.png](https://i.loli.net/2021/03/02/BXFwtHC7rMDguRY.png)
+
+The second error in **dodgy code** is that classes doesn't override equals in superclass. Because it used `extend`, and it should override `equals` function. But as long as it didn't use it, it should be fine that this class doesn't override equals in superclass.
+
+![image.png](https://i.loli.net/2021/03/02/GZFELa8C4nSkQPD.png)
+
+### Contrast between Spotbugs and Checkstyle
+
+The information for each tool is quite different. 
+
+For spotbugs, this one is more neat and clear with description and code. Every error is categorized into five folders. 
+
+- Correctness
+- Dodgy code
+- Bad practice
+- Performance
+- Experimental
+
+For checkstyle, this one is more messy. Every error message is put under its original file name. Once you press the error information, you will jump into the error line. The error most frequently appeared are 
+
+- CustomImportError
+- LineLength(too long)
+- Indentation
+- RequiredEmptyLineBeforeBlockTagGroup
+
+They are more likely to be the coding style error instead of bugs.
 
 # Team Members
 
@@ -754,13 +972,17 @@ Xinyi Hu(https://github.com/samaritanhu)
 
 # Reference
 
-https://www.vogella.com/tutorials/JUnit/article.html
+[1] https://livebook.manning.com/book/effective-unit-testing/chapter-7/8
 
-https://www.softwaretestingclass.com/what-is-structural-testing/
+[2] https://www.vogella.com/tutorials/JUnit/article.html
 
-https://www.tutorialspoint.com/software_testing_dictionary/structural_testing.htm
+[3] https://www.softwaretestingclass.com/what-is-structural-testing/
 
-https://stackify.com/code-coverage-tools/
+[4] https://www.tutorialspoint.com/software_testing_dictionary/structural_testing.htm
 
-https://www.eclemma.org/jacoco/
+[5] https://stackify.com/code-coverage-tools/
+
+[6] https://www.eclemma.org/jacoco/
+
+[7] https://devopedia.org/mock-testing
 

@@ -32,7 +32,9 @@ The first one is **SpotBugs**. SpotBugs is a program that uses static analysis t
 
 The second one is **Checkstyle**. Checkstyle is a development tool that helps programmers write Java code that meets coding standards. Sample coding standard: google coding style or sun check. 
 
-### Results of Static Analysis by Spotbugs and Checkstyle.
+### Results of Static Analysis by Spotbugs and Checkstyle
+
+#### CheckStyle
 
 Firstly, we used the checkstyle tool. I pressed the "Check Module" button and the result is as below. This used the sun checks method. 
 
@@ -42,7 +44,7 @@ The following picture used the google checks method.
 
 ![image.png](https://i.loli.net/2021/03/02/8BWXQgynmVxivzf.png)
 
-#### Deep dive into some errors
+##### Deep dive into some errors
 
 The first error I met with is `CustomImportError`. Actually it emphasised on the order of import, not an actual bug that you will see in the command line. 
 
@@ -50,23 +52,43 @@ The second error I met with is `Indentation`. It used 4 tabs instead of 2 tabs.
 
 The third error I met with is `RequiredEmptyLineBeforeBlockTagGroup`. It requires us to have an empty line before tag `@Return`. 
 
-From my perspective, 
+From my perspective, these errors existed, but they aren't actual problems in the code. They are more likely to be the coding style error instead of bugs.
 
+![image.png](https://i.loli.net/2021/03/02/wioanjmNOC1b5GQ.png)
 
+#### Spotbugs
 
 Next, we used the spotbugs tool. Different from the checkstyle tool, it is divided into folders and each java file, and it will spotlights the lines and functions or classes that has some type error or bugs. 
 
 ![image.png](https://i.loli.net/2021/03/02/kgB1MNfmAYuXLGK.png)
 
+##### Deep dive into some errors
 
+The first error in **correctness** is that non-null field is not initialized. From my perspective, it is mentioning that `JSoup` didn't initialize the parameter for the class `DatasetIterator`
 
-- Static Analyzers
-  - First, describe the goals, purposes, and use of static analysis tools (i.e., static analyzers). 
-  - Use two different static analyzers on your project (on the whole or on the same subset of the code for each tool). Options:
-    - [Checkstyle](https://checkstyle.sourceforge.io/)
-    - [FindBugs](http://findbugs.sourceforge.net/) or [SpotBugs](https://spotbugs.github.io/) (not both)
-    - [Infer](https://fbinfer.com/)
-    - [PMD](https://pmd.github.io/)
-  - Show the aggregated numbers for the results. First separate out the results for each tool.
-  - For each tool, dive into the warnings that they identify and describe in detail a few. Describe how they are or aren't actual problems in the code. 
-  - Contrast the information that was provided by each tool. Did they provide information that overlaps in nature or are fundamentally different in their purposes? If they are similar, do they identify distinct warnings (i.e., does one identify warnings that the other does not, and vice versa)? Do they identify some of the same warnings, and if so, are the information provided by each tool of equal value? How so or how not?
+![image.png](https://i.loli.net/2021/03/02/BXFwtHC7rMDguRY.png)
+
+The second error in **dodgy code** is that classes doesn't override equals in superclass. Because it used `extend`, and it should override `equals` function. But as long as it didn't use it, it should be fine that this class doesn't override equals in superclass.
+
+![image.png](https://i.loli.net/2021/03/02/GZFELa8C4nSkQPD.png)
+
+### Contrast between Spotbugs and Checkstyle
+
+The information for each tool is quite different. 
+
+For spotbugs, this one is more neat and clear with description and code. Every error is categorized into five folders. 
+
+- Correctness
+- Dodgy code
+- Bad practice
+- Performance
+- Experimental
+
+For checkstyle, this one is more messy. Every error message is put under its original file name. Once you press the error information, you will jump into the error line. The error most frequently appeared are 
+
+- CustomImportError
+- LineLength(too long)
+- Indentation
+- RequiredEmptyLineBeforeBlockTagGroup
+
+They are more likely to be the coding style error instead of bugs.
