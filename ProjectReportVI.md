@@ -26,6 +26,38 @@ After talking about the basic concepts of static analysis, we come to the questi
 
 ### Tools for Static Analysis
 
+We used two different static analyzers on our project `JSoup`.
+
+The first one is **SpotBugs**. SpotBugs is a program that uses static analysis to find errors in Java code.
+
+The second one is **Checkstyle**. Checkstyle is a development tool that helps programmers write Java code that meets coding standards. Sample coding standard: google coding style or sun check. 
+
+### Results of Static Analysis by Spotbugs and Checkstyle.
+
+Firstly, we used the checkstyle tool. I pressed the "Check Module" button and the result is as below. This used the sun checks method. 
+
+![image.png](https://i.loli.net/2021/03/02/Gze3rEZkjBswlYg.png)
+
+The following picture used the google checks method.
+
+![image.png](https://i.loli.net/2021/03/02/8BWXQgynmVxivzf.png)
+
+#### Deep dive into some errors
+
+The first error I met with is `CustomImportError`. Actually it emphasised on the order of import, not an actual bug that you will see in the command line. 
+
+The second error I met with is `Indentation`. It used 4 tabs instead of 2 tabs. 
+
+The third error I met with is `RequiredEmptyLineBeforeBlockTagGroup`. It requires us to have an empty line before tag `@Return`. 
+
+From my perspective, 
+
+
+
+Next, we used the spotbugs tool. Different from the checkstyle tool, it is divided into folders and each java file, and it will spotlights the lines and functions or classes that has some type error or bugs. 
+
+![image.png](https://i.loli.net/2021/03/02/kgB1MNfmAYuXLGK.png)
+
 
 
 - Static Analyzers
